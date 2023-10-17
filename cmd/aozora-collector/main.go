@@ -26,10 +26,13 @@ func findEntries(sitURL string) ([]Entry, error) {
 		log.Fatalf("status code error: %d %s", response.StatusCode, response.Status)
 	}
 
-	_, err = goquery.NewDocumentFromReader(response.Body)
+	doc, err := goquery.NewDocumentFromReader(response.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
+	doc.Find("ol li a").Each(func(i int, selection *goquery.Selection) {
+		println(selection.Text(), selection.AttrOr("href", ""))
+	})
 
 	return nil, nil
 }
