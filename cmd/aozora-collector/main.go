@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 type Entry struct {
@@ -38,8 +39,8 @@ func findEntries(sitURL string) ([]Entry, error) {
 			return
 		}
 		pageURL := fmt.Sprintf("https://www.aozora.gr.jp/cards/%s/card%s.html", token[1], token[2])
-		//author, zipURL := findAuthorAndZIP(pageURL)
-		println(pageURL)
+		author, zipURL := findAuthorAndZIP(pageURL)
+		println(author, zipURL)
 	})
 
 	return nil, nil
@@ -56,10 +57,19 @@ func findAuthorAndZIP(siteURL string) (string, string) {
 		log.Fatalf("status code error: %d %s", response.StatusCode, response.Status)
 		return "", ""
 	}
+	doc, err := goquery.NewDocumentFromReader(response.Body)
+
+	author := doc.Find("table[summary=作家データ] tr:nth-child(1) td:nth-child(2)").Text()
 
 	zipURL := ""
-	// TODO
-	return zipURL, ""
+	doc.Find("table.download a").Each(func(i int, selection *goquery.Selection) {
+		href := selection.AttrOr("href", "")
+		if strings.HasSuffix(href, ".zip") {
+			zipURL = href
+		}
+	})
+
+	return author, zipURL
 }
 
 func main() {
