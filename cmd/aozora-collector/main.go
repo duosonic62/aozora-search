@@ -41,6 +41,7 @@ func findEntries(sitURL string) ([]Entry, error) {
 		pageURL := fmt.Sprintf("https://www.aozora.gr.jp/cards/%s/card%s.html", token[1], token[2])
 		author, zipURL := findAuthorAndZIP(pageURL)
 		println(author, zipURL)
+		println(pageURL)
 	})
 
 	return nil, nil
@@ -59,7 +60,7 @@ func findAuthorAndZIP(siteURL string) (string, string) {
 	}
 	doc, err := goquery.NewDocumentFromReader(response.Body)
 
-	author := doc.Find("table[summary=作家データ] tr:nth-child(1) td:nth-child(2)").Text()
+	author := doc.Find("table[summary=作家データ] tr:nth-child(2) td:nth-child(2)").Text()
 
 	zipURL := ""
 	doc.Find("table.download a").Each(func(i int, selection *goquery.Selection) {
