@@ -1,4 +1,4 @@
-package main
+package database
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func setupDB(dsn string) (*sql.DB, error) {
+func SetupDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
 		log.Fatal(err)

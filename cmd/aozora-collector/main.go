@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	db, err := setupDB("database.sqlite")
+	db, err := database.SetupDB("database.sqlite")
 	if err != nil {
 		log.Fatal(err)
 	}
