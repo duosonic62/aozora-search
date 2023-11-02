@@ -17,6 +17,8 @@ import (
 	"strings"
 )
 
+var pageUrlFormat = "https://www.aozora.gr.jp/cards/%s/card%s.html"
+
 func FindEntries(siteURL string) ([]domain.Entry, error) {
 	response, err := http.Get(siteURL)
 	if err != nil {
@@ -39,7 +41,7 @@ func FindEntries(siteURL string) ([]domain.Entry, error) {
 		if len(token) != 3 {
 			return
 		}
-		pageURL := fmt.Sprintf("https://www.aozora.gr.jp/cards/%s/card%s.html", token[1], token[2])
+		pageURL := fmt.Sprintf(pageUrlFormat, token[1], token[2])
 		author, zipURL := findAuthorAndZIP(pageURL)
 		if zipURL != "" {
 			entries = append(entries, domain.Entry{
